@@ -6,9 +6,13 @@ import com.app.msg.domain.factory.UserFactory;
 import com.app.msg.interfaces.LoginReq;
 import com.app.msg.interfaces.RegisterReq;
 import com.app.msg.repo.UserRepository;
+import com.app.msg.security.UserSessionInfo;
+import com.app.msg.security.WebSecurityConfig;
 import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by infear on 2017/5/25.
@@ -19,7 +23,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserRepository userRepository;
 
     @Override
-    public boolean login(LoginReq req) {
+    public boolean login(LoginReq req, HttpSession session) {
         if (req == null) {
             return false;
         }
@@ -27,11 +31,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (user == null || !user.getPassword().equals(MD5Utils.md5(req.getPassword()))) {
             return false;
         }
+        session.setAttribute(WebSecurityConfig.SESSION_KEY, new UserSessionInfo(user.getId(), user.getName()));
         return true;
     }
 
     @Override
-    public String register(RegisterReq req) {
+    public String register(RegisterReq req, HttpSession session) {
         if (req == null) {
             return "Request illegal.";
         }
@@ -43,6 +48,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         User user = UserFactory.create(req);
         userRepository.save(user);
+        session.setAttribute(WebSecurityConfig.SESSION_KEY, new UserSessionInfo(user.getId(), user.getName()));
         return null;
     }
 }

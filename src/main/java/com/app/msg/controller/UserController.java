@@ -6,13 +6,11 @@ import com.app.msg.security.WebSecurityConfig;
 import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -26,18 +24,6 @@ public class UserController {
     @Autowired
     UserInfoService userInfoService;
 
-    @GetMapping("/")
-    public String index(@SessionAttribute(WebSecurityConfig.SESSION_KEY) String name, Model model) {
-        model.addAttribute("name", name);
-        return "index";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-
     @GetMapping("/register")
     public String register() {
         return "register";
@@ -48,30 +34,32 @@ public class UserController {
     @ResponseBody
     Map<String, Object> registerPost(@RequestBody RegisterReq req, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
-        String msg = userInfoService.register(req);
+        String msg = userInfoService.register(req, session);
         if (!StringUtils.isEmpty(msg)) {
             result.put("success", false);
             result.put("message", msg);
             return result;
         }
         result.put("success", true);
-        session.setAttribute(WebSecurityConfig.SESSION_KEY, req.getName());
         return result;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
     @PostMapping("/loginPost")
     public
     @ResponseBody
     Map<String, Object> loginPost(@RequestBody LoginReq req, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
-        if (!userInfoService.login(req)) {
+        if (!userInfoService.login(req, session)) {
             result.put("success", false);
             result.put("message", "Login Failed!");
             return result;
         }
         result.put("success", true);
-        session.setAttribute(WebSecurityConfig.SESSION_KEY, req.getName());
         return result;
     }
 
