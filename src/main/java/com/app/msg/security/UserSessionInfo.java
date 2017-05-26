@@ -4,27 +4,27 @@ package com.app.msg.security;
  * Created by infear on 2017/5/26.
  */
 public class UserSessionInfo {
-    private Long userId;
-    private String username;
+    private Long id;
+    private String name;
 
-    public UserSessionInfo(Long userId, String username) {
-        this.userId = userId;
-        this.username = username;
+    public UserSessionInfo(Long userId, String name) {
+        this.id = userId;
+        this.name = name;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 }
