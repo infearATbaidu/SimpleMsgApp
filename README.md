@@ -8,12 +8,12 @@
 主页  
 聊天页面
 
-接口：        
-注册：/registerPost  
+接口：   
+注册：/registerPost    
 登录：/loginPost  
 联系人列表：/contactList  
 搜索用户：/searchUser  
-添加/删除联系人：/addContact/deleteContact  
+添加/删除联系人：/addContact/deleteContact  
 发送/删除消息：/sendMsg/deleteMsg  
 历史消息查询（标为已读）：/queryMsg  
 
