@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>SimpleMsgApp</title>
+    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('app', []);
+        app.controller('Main', function ($rootScope, $scope, $http) {
+            $scope.message = '';
+            $scope.name = '';
+            $scope.password = '';
+
+            //登录
+            $scope.login = function () {
+                $scope.message = '';
+                var user = new Object()
+                user.name = $scope.name
+                user.password = $scope.password
+                $http(
+                    {
+                        url: '/loginPost',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(user)
+                    }).success(function (r) {
+                    if (!r.success) {
+                        $scope.message = r.message;
+                        return;
+                    }
+                    window.location.href = '/';
+                });
+            }
+
+            $scope.redirectToRegister = function () {
+                window.location.href = '/register';
+            }
+
+        });
+    </script>
+</head>
+<body ng-app="app" ng-controller="Main">
+<h1>Login Page</h1>
+<table cellspacing="1">
+    <tr>
+        <td>username：</td>
+        <td><input ng-model="name"/></td>
+    </tr>
+    <tr>
+        <td>password：</td>
+        <td><input type="password" ng-model="password"/></td>
+    </tr>
+</table>
+<br/>
+<input type="button" value="login" ng-click="login()"/>
+<input type="button" value="register" ng-click="redirectToRegister()"/>
+<br/>
+<span style="color:orangered" ng-show="message">{{message}}</span>
+</body>
+</html>

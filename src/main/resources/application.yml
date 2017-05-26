@@ -1,0 +1,17 @@
+spring:
+  profiles.active: dev
+
+server:
+  port: 8081
+
+---
+
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.94.45.22:8306/demo
+    username: root
+    password:
+
+
+
