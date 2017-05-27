@@ -1,6 +1,7 @@
 package com.app.msg.domain.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
@@ -8,11 +9,14 @@ import java.util.Date;
 /**
  * Created by infear on 2017/5/26.
  */
+@Entity
 public class Contact {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(name = "user_id_s")
     private Long userIdS;
+    @Column(name = "user_id_l")
     private Long userIdL;
     private int status;
     @Column(name = "created_time")

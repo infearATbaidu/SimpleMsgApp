@@ -1,4 +1,4 @@
-package com.app.msg.security;
+package com.app.msg.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

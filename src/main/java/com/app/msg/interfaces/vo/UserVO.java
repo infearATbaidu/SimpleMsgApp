@@ -1,16 +1,11 @@
-package com.app.msg.security;
+package com.app.msg.interfaces.vo;
 
 /**
- * Created by infear on 2017/5/26.
+ * Created by infear on 2017/5/27.
  */
-public class UserSessionInfo {
+public class UserVO {
     private Long id;
     private String name;
-
-    public UserSessionInfo(Long userId, String name) {
-        this.id = userId;
-        this.name = name;
-    }
 
     public Long getId() {
         return id;

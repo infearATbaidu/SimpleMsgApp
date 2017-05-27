@@ -6,8 +6,10 @@
     <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
     <script type="text/javascript">
         var app = angular.module('app', []);
+
         app.controller('Main', function ($rootScope, $scope, $http) {
-            $scope.users=[]
+            $scope.searchResults = []
+            $scope.contacts = []
             //搜索用户
             $scope.search = function () {
                 var seReq = new Object()
@@ -25,24 +27,66 @@
                         $scope.message = 'No match result';
                         return;
                     }
-                    $scope.users = r;
+                    $scope.searchResults = r;
                 });
             }
 
+            $scope.addContact = function (userId) {
+                var addContactReq = new Object();
+                addContactReq.userId = userId;
+                $http(
+                    {
+                        url: '/addContact',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(addContactReq)
+                    }).success(function (r) {
+                    if (!r) {
+                        $scope.message = 'Add Contact Failed';
+                        return;
+                    }
+                });
+            }
 
+            $scope.contactList = function () {
+                $scope.contacts = ["test"];
+            }
+
+            /* var initStompClient = function() {
+             ws.init('/ws');
+
+             ws.connect(function (frame) {
+             ws.subscribe("/app/contactList?id="+info.id, function (message) {
+             $scope.contacts = $scope.contactList();
+             });
+             });
+             }
+
+             initStompClient()*/
+            $scope.contactList()
         });
-
-
     </script>
 </head>
 <body ng-app="app" ng-controller="Main">
 <h1>Main Page</h1>
-<h3 th:text="'User：' + ${info.name}"></h3>
+<h3 th:text="'Your name：' + ${info.name}"></h3>
+<table>
+    <tr ng-repeat="user in contacts">
+        <td>{{user}}</td>
+    </tr>
+</table>
 <h3>
     <input ng-model="usernameToSearch"/>
     <input type="button" value="Search" ng-click="search()"/>
 </h3>
-<span style="color:red" ng-show="users.length!=0">{{users}}</span>
+<table>
+    <tr ng-repeat="user in searchResults">
+        <td>{{user.name}}</td>
+        <td><input type="button" value="+" ng-click="addContact(user.id)"/></td>
+    </tr>
+</table>
 <a href="/logout">Logout</a>
 <br/>
 </body>

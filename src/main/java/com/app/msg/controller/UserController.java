@@ -1,8 +1,8 @@
 package com.app.msg.controller;
 
+import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.interfaces.LoginReq;
 import com.app.msg.interfaces.RegisterReq;
-import com.app.msg.security.WebSecurityConfig;
 import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

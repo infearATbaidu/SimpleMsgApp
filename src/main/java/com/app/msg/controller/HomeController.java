@@ -1,13 +1,21 @@
 package com.app.msg.controller;
 
+import com.app.msg.common.UserSessionInfo;
+import com.app.msg.config.WebSecurityConfig;
+import com.app.msg.interfaces.AddContactReq;
 import com.app.msg.interfaces.SearchReq;
-import com.app.msg.security.UserSessionInfo;
-import com.app.msg.security.WebSecurityConfig;
+import com.app.msg.interfaces.vo.UserVO;
+import com.app.msg.service.ContactService;
+import com.app.msg.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +23,10 @@ import java.util.List;
  */
 @Controller
 public class HomeController {
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private ContactService contactService;
 
     @GetMapping("/")
     public String index(@SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info, Model model) {
@@ -25,7 +37,14 @@ public class HomeController {
     @PostMapping("/search")
     public
     @ResponseBody
-    List<String> searchUsers(@RequestBody SearchReq req) {
-        return Arrays.asList("Hello", "World");
+    List<UserVO> searchUsers(@RequestBody SearchReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
+        return userInfoService.searchByName(req.getName(), info);
+    }
+
+    @PostMapping("/addContact")
+    public
+    @ResponseBody
+    boolean searchUsers(@RequestBody AddContactReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
+        return contactService.addContact(req, info.getId());
     }
 }
