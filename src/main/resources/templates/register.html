@@ -3,41 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>SimpleMsgApp</title>
-    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
-    <script type="text/javascript">
-        var app = angular.module('app', []);
-        app.controller('Main', function ($rootScope, $scope, $http) {
-            $scope.message = '';
-            $scope.name = '';
-            $scope.password = '';
-
-            $scope.register = function () {
-                $scope.message = '';
-                var user = new Object()
-                user.name = $scope.name
-                user.password = $scope.password
-                user.passwordConfirm = $scope.passwordConfirm
-                $http(
-                    {
-                        url: '/registerPost',
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        data: JSON.stringify(user)
-                    }).success(function (r) {
-                    if (!r.success) {
-                        $scope.message = r.message;
-                        return;
-                    }
-                    window.location.href = '/';
-                });
-            }
-
-        });
-    </script>
 </head>
-<body ng-app="app" ng-controller="Main">
+<body ng-app="app" ng-controller="register">
+<script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/controllers.js"></script>
 <h1>Register Page</h1>
 <table cellspacing="1">
     <tr>
@@ -57,5 +27,6 @@
 <input type="button" value="Submit" ng-click="register()"/>
 <br/>
 <span style="color:orangered" ng-show="message">{{message}}</span>
+
 </body>
 </html>

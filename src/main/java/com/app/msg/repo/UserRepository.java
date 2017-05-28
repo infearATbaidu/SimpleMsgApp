@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by infear on 2017/5/25.
@@ -14,4 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByName(String username);
 
     List<User> findByNameLike(String namePattern);
+
+    List<User> findByIdIn(Set<Long> contactIds);
 }

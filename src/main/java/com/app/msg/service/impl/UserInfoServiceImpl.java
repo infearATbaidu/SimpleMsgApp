@@ -3,20 +3,26 @@ package com.app.msg.service.impl;
 import com.app.msg.common.MD5Utils;
 import com.app.msg.common.UserSessionInfo;
 import com.app.msg.config.WebSecurityConfig;
+import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.User;
 import com.app.msg.domain.factory.UserFactory;
+import com.app.msg.interfaces.ContactListReq;
 import com.app.msg.interfaces.LoginReq;
 import com.app.msg.interfaces.RegisterReq;
 import com.app.msg.interfaces.vo.UserVO;
+import com.app.msg.repo.ContactRepository;
 import com.app.msg.repo.UserRepository;
 import com.app.msg.service.UserInfoService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by infear on 2017/5/25.
@@ -25,6 +31,8 @@ import java.util.List;
 public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ContactRepository contactRepository;
 
     @Override
     public boolean login(LoginReq req, HttpSession session) {
@@ -63,6 +71,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             return null;
         }
         List<UserVO> result = Lists.newArrayList();
+        Set<Long> contacts = getContactsList(info.getId());
         for (User user : users) {
             if (info.getId().equals(user.getId())) {
                 continue;
@@ -70,6 +79,47 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserVO vo = new UserVO();
             vo.setId(user.getId());
             vo.setName(user.getName());
+            vo.setContactFlag(contacts.contains(user.getId()));
+            result.add(vo);
+        }
+        return result;
+    }
+
+    // Todo:redis
+    private Set<Long> getContactsList(Long id) {
+        Set<Long> result = Sets.newHashSet();
+        List<Contact> contacts = contactRepository.findByUserIdLAndStatus(id, 1);
+        if (!CollectionUtils.isEmpty(contacts)) {
+            result.addAll(contacts.stream().map(contact -> contact.getUserIdS()).collect(Collectors.toSet()));
+        }
+        contacts = contactRepository.findByUserIdSAndStatus(id, 1);
+        if (!CollectionUtils.isEmpty(contacts)) {
+            result.addAll(contacts.stream().map(contact -> contact.getUserIdL()).collect(Collectors.toSet()));
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isLogin(HttpSession session) {
+        return session.getAttribute(WebSecurityConfig.SESSION_KEY) != null;
+    }
+
+    @Override
+    public List<UserVO> queryContacts(ContactListReq req, UserSessionInfo info) {
+        Set<Long> contactIds = getContactsList(info.getId());
+        if (CollectionUtils.isEmpty(contactIds)) {
+            return null;
+        }
+        List<User> users = userRepository.findByIdIn(contactIds);
+        if (CollectionUtils.isEmpty(users)) {
+            return null;
+        }
+        List<UserVO> result = Lists.newArrayList();
+        for (User user : users) {
+            UserVO vo = new UserVO();
+            vo.setId(user.getId());
+            vo.setName(user.getName());
+            vo.setContactFlag(true);
             result.add(vo);
         }
         return result;

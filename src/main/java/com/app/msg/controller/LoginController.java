@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ import java.util.Map;
  * Created by infear on 2017/5/25.
  */
 @Controller
-public class UserController {
+public class LoginController {
     @Autowired
     UserInfoService userInfoService;
 
@@ -45,7 +47,10 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpSession session, HttpServletResponse response) throws IOException {
+        if (userInfoService.isLogin(session)) {
+            response.sendRedirect("/");
+        }
         return "login";
     }
 

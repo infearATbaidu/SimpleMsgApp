@@ -43,12 +43,11 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
                 throws Exception {
             HttpSession session = request.getSession();
             // 如果已经登陆，则立刻通过
-            if (session.getAttribute(SESSION_KEY) != null)
+            if (session.getAttribute(SESSION_KEY) != null) {
                 return true;
-
+            }
             // 跳转登录
-            String url = "/login";
-            response.sendRedirect(url);
+            response.sendRedirect("/login");
             return false;
         }
     }

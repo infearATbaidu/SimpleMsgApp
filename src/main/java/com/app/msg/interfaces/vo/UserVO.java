@@ -6,6 +6,7 @@ package com.app.msg.interfaces.vo;
 public class UserVO {
     private Long id;
     private String name;
+    private boolean contactFlag;
 
     public Long getId() {
         return id;
@@ -21,5 +22,13 @@ public class UserVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean getContactFlag() {
+        return contactFlag;
+    }
+
+    public void setContactFlag(boolean contactFlag) {
+        this.contactFlag = contactFlag;
     }
 }

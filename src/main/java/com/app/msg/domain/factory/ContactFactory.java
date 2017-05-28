@@ -10,6 +10,7 @@ public class ContactFactory {
         Contact contact = new Contact();
         contact.setUserIdS(Math.min(curId, userId));
         contact.setUserIdL(Math.max(curId, userId));
+        contact.setStatus(1);
         return contact;
     }
 }
