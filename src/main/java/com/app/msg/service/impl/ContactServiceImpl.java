@@ -3,7 +3,7 @@ package com.app.msg.service.impl;
 import com.app.msg.common.ContactStatus;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.factory.ContactFactory;
-import com.app.msg.interfaces.UpdateContactReq;
+import com.app.msg.interfaces.request.UpdateContactReq;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,10 @@ public class ContactServiceImpl implements ContactService {
         }
         Contact contact = contactRepository.findByUserIdSAndUserIdL(Math.min(curUserId, req.getUserId()), Math.max(curUserId, req.getUserId()));
         if (contact != null) {
-            contact.setStatus(req.isAdd() ? ContactStatus.ADDED : ContactStatus.REMOVED);
+            contact.setStatus(req.isFlag() ? ContactStatus.ADDED : ContactStatus.REMOVED);
             contactRepository.save(contact);
-        } else if (req.isAdd()) {
-            contact = ContactFactory.create(req.getUserId(), curUserId, req.isAdd() ? ContactStatus.ADDED : ContactStatus.REMOVED);
+        } else if (req.isFlag()) {
+            contact = ContactFactory.create(req.getUserId(), curUserId, req.isFlag() ? ContactStatus.ADDED : ContactStatus.REMOVED);
             contactRepository.save(contact);
         }
         messagingTemplate.convertAndSend(CONTACTS + curUserId, "");

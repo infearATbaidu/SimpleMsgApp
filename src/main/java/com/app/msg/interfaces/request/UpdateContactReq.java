@@ -1,11 +1,11 @@
-package com.app.msg.interfaces;
+package com.app.msg.interfaces.request;
 
 /**
  * Created by infear on 2017/5/26.
  */
 public class UpdateContactReq {
     private Long userId;
-    private boolean add;
+    private boolean flag;
 
     public Long getUserId() {
         return userId;
@@ -15,11 +15,11 @@ public class UpdateContactReq {
         this.userId = userId;
     }
 
-    public boolean isAdd() {
-        return add;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setAdd(boolean add) {
-        this.add = add;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

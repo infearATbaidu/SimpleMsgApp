@@ -1,9 +1,9 @@
 package com.app.msg.service;
 
 import com.app.msg.common.UserSessionInfo;
-import com.app.msg.interfaces.ContactListReq;
-import com.app.msg.interfaces.LoginReq;
-import com.app.msg.interfaces.RegisterReq;
+import com.app.msg.interfaces.request.ContactListReq;
+import com.app.msg.interfaces.request.LoginReq;
+import com.app.msg.interfaces.request.RegisterReq;
 import com.app.msg.interfaces.vo.UserVO;
 
 import javax.servlet.http.HttpSession;

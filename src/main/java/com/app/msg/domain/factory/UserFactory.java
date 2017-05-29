@@ -1,8 +1,8 @@
 package com.app.msg.domain.factory;
 
-import com.app.msg.common.MD5Utils;
+import com.app.msg.common.md5.MD5Utils;
 import com.app.msg.domain.entity.User;
-import com.app.msg.interfaces.RegisterReq;
+import com.app.msg.interfaces.request.RegisterReq;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.app.msg.interfaces;
+package com.app.msg.interfaces.request;
 
 /**
  * Created by infear on 2017/5/28.

@@ -1,14 +1,14 @@
 package com.app.msg.service.impl;
 
-import com.app.msg.common.MD5Utils;
 import com.app.msg.common.UserSessionInfo;
+import com.app.msg.common.md5.MD5Utils;
 import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.User;
 import com.app.msg.domain.factory.UserFactory;
-import com.app.msg.interfaces.ContactListReq;
-import com.app.msg.interfaces.LoginReq;
-import com.app.msg.interfaces.RegisterReq;
+import com.app.msg.interfaces.request.ContactListReq;
+import com.app.msg.interfaces.request.LoginReq;
+import com.app.msg.interfaces.request.RegisterReq;
 import com.app.msg.interfaces.vo.UserVO;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.repo.UserRepository;

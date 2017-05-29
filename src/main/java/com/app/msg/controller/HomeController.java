@@ -1,10 +1,11 @@
 package com.app.msg.controller;
 
 import com.app.msg.common.UserSessionInfo;
+import com.app.msg.common.log.LoggerOut;
 import com.app.msg.config.WebSecurityConfig;
-import com.app.msg.interfaces.ContactListReq;
-import com.app.msg.interfaces.SearchReq;
-import com.app.msg.interfaces.UpdateContactReq;
+import com.app.msg.interfaces.request.ContactListReq;
+import com.app.msg.interfaces.request.SearchReq;
+import com.app.msg.interfaces.request.UpdateContactReq;
 import com.app.msg.interfaces.vo.UserVO;
 import com.app.msg.service.ContactService;
 import com.app.msg.service.UserInfoService;
@@ -32,20 +33,22 @@ public class HomeController {
     }
 
     @PostMapping("/search")
-    public
-    @ResponseBody
+    @LoggerOut
+    public @ResponseBody
     List<UserVO> searchUsers(@RequestBody SearchReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
         return userInfoService.searchByName(req.getName(), info);
     }
 
     @PostMapping("/contactList")
+    @LoggerOut
     public
     @ResponseBody
     List<UserVO> contactList(@RequestBody ContactListReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
         return userInfoService.queryContacts(req, info);
     }
 
-    @PostMapping("/addContact")
+    @PostMapping("/updateContact")
+    @LoggerOut
     public
     @ResponseBody
     boolean searchUsers(@RequestBody UpdateContactReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {

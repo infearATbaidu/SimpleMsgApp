@@ -1,4 +1,4 @@
-package com.app.msg.common;
+package com.app.msg.common.md5;
 
 import org.springframework.util.DigestUtils;
 

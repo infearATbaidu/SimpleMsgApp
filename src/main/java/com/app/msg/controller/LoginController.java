@@ -1,9 +1,11 @@
 package com.app.msg.controller;
 
 import com.app.msg.common.UserSessionInfo;
+import com.app.msg.common.log.LoggerOut;
 import com.app.msg.config.WebSecurityConfig;
-import com.app.msg.interfaces.LoginReq;
-import com.app.msg.interfaces.RegisterReq;
+import com.app.msg.interfaces.BaseResponse;
+import com.app.msg.interfaces.request.LoginReq;
+import com.app.msg.interfaces.request.RegisterReq;
 import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,18 +35,18 @@ public class LoginController {
     }
 
     @PostMapping("/registerPost")
-    public
-    @ResponseBody
-    Map<String, Object> registerPost(@RequestBody RegisterReq req, HttpSession session) {
+    @LoggerOut
+    public @ResponseBody
+    BaseResponse<Map> registerPost(@RequestBody RegisterReq req, HttpSession session) {
         Map<String, Object> result = new HashMap<>();
         String msg = userInfoService.register(req, session);
         if (!StringUtils.isEmpty(msg)) {
             result.put("success", false);
             result.put("message", msg);
-            return result;
+            return BaseResponse.newSuccResponse(result);
         }
         result.put("success", true);
-        return result;
+        return BaseResponse.newSuccResponse(result);
     }
 
     @GetMapping("/login")

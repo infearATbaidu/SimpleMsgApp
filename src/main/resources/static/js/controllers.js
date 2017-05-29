@@ -20,8 +20,8 @@ ctrl.controller('register', function ($rootScope, $scope, $http) {
                 },
                 data: JSON.stringify(user)
             }).success(function (r) {
-            if (!r.success) {
-                $scope.message = r.message;
+            if (!r.result.success) {
+                $scope.message = r.result.message;
                 return;
             }
             window.location.href = '/';
