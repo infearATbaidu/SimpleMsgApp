@@ -2,4 +2,4 @@
 
 /* App Module */
 
-var app = angular.module('app', ['ctrl']);
+var app = angular.module('app', ['ctrl', 'service']);

@@ -2,9 +2,9 @@ package com.app.msg.controller;
 
 import com.app.msg.common.UserSessionInfo;
 import com.app.msg.config.WebSecurityConfig;
-import com.app.msg.interfaces.AddContactReq;
 import com.app.msg.interfaces.ContactListReq;
 import com.app.msg.interfaces.SearchReq;
+import com.app.msg.interfaces.UpdateContactReq;
 import com.app.msg.interfaces.vo.UserVO;
 import com.app.msg.service.ContactService;
 import com.app.msg.service.UserInfoService;
@@ -48,7 +48,7 @@ public class HomeController {
     @PostMapping("/addContact")
     public
     @ResponseBody
-    boolean searchUsers(@RequestBody AddContactReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
-        return contactService.addContact(req, info.getId());
+    boolean searchUsers(@RequestBody UpdateContactReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
+        return contactService.updateContact(req, info.getId());
     }
 }

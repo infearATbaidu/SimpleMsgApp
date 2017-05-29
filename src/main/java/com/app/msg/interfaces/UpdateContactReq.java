@@ -3,8 +3,9 @@ package com.app.msg.interfaces;
 /**
  * Created by infear on 2017/5/26.
  */
-public class AddContactReq {
+public class UpdateContactReq {
     private Long userId;
+    private boolean add;
 
     public Long getUserId() {
         return userId;
@@ -12,5 +13,13 @@ public class AddContactReq {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public boolean isAdd() {
+        return add;
+    }
+
+    public void setAdd(boolean add) {
+        this.add = add;
     }
 }

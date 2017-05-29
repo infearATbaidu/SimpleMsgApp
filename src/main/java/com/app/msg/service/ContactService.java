@@ -1,10 +1,10 @@
 package com.app.msg.service;
 
-import com.app.msg.interfaces.AddContactReq;
+import com.app.msg.interfaces.UpdateContactReq;
 
 /**
  * Created by infear on 2017/5/27.
  */
 public interface ContactService {
-    boolean addContact(AddContactReq req, Long curId);
+    boolean updateContact(UpdateContactReq req, Long curId);
 }

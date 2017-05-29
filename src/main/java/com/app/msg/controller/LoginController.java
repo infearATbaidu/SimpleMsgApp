@@ -1,5 +1,6 @@
 package com.app.msg.controller;
 
+import com.app.msg.common.UserSessionInfo;
 import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.interfaces.LoginReq;
 import com.app.msg.interfaces.RegisterReq;
@@ -65,6 +66,7 @@ public class LoginController {
             return result;
         }
         result.put("success", true);
+        result.put("userId", ((UserSessionInfo) session.getAttribute(WebSecurityConfig.SESSION_KEY)).getId());
         return result;
     }
 

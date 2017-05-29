@@ -15,4 +15,5 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 
     List<Contact> findByUserIdLAndStatus(Long userid, int status);
 
+    Contact findByUserIdSAndUserIdL(long min, long max);
 }
