@@ -10,7 +10,7 @@
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
 </head>
-<body ng-app="app" ng-controller="index">
+<body ng-app="app" ng-controller="index" ng-init="init()">
 <h1>Main Page</h1>
 <h3 th:text="${info.id}" th:name="id" th:hidden="true"></h3>
 <h3 th:text="'Your name：' + ${info.name}"></h3>
@@ -37,83 +37,4 @@
 <a href="/logout">Logout</a>
 <br/>
 </body>
-<script type="text/javascript">
-    var ctrl = angular.module('ctrl')
-    ctrl.controller('index', function ($rootScope, $scope, $http, ws) {
-        $scope.searchResults = []
-        $scope.contacts = []
-        //搜索用户
-        $scope.search = function () {
-            var seReq = new Object()
-            seReq.name = $scope.usernameToSearch
-            $http(
-                {
-                    url: '/search',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(seReq)
-                }).success(function (r) {
-                if (!r) {
-                    $scope.message = 'No match result';
-                    return;
-                }
-                $scope.searchResults = r;
-            });
-        }
-
-        $scope.updateContact = function (userId, flag) {
-            var addContactReq = new Object();
-            addContactReq.userId = userId;
-            addContactReq.flag = flag;
-            $http(
-                {
-                    url: '/updateContact',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(addContactReq)
-                }).success(function (r) {
-                if (!r) {
-                    $scope.message = 'Add Contact Failed';
-                    return;
-                }
-            });
-        }
-
-        $scope.contactList = function () {
-            $scope.contacts = [];
-            $http(
-                {
-                    url: '/contactList',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: {}
-                }).success(function (r) {
-                if (r.length != 0) {
-                    $scope.contacts = r;
-                }
-            });
-        }
-
-        $scope.contactList();
-
-        $scope.initStompClient = function (userId) {
-            ws.init('/ws');
-
-            ws.connect(function (frame) {
-                ws.subscribe("/app/contactList?id=" + userId, function (message) {
-                    $scope.contactList();
-                });
-
-            });
-        }
-
-        $scope.initStompClient(document.getElementsByName("id")[0].innerText);
-    });
-</script>
 </html>

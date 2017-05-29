@@ -4,6 +4,7 @@ import com.app.msg.common.UserSessionInfo;
 import com.app.msg.common.log.LoggerOut;
 import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.interfaces.request.ContactListReq;
+import com.app.msg.interfaces.request.EmptyReq;
 import com.app.msg.interfaces.request.SearchReq;
 import com.app.msg.interfaces.request.UpdateContactReq;
 import com.app.msg.interfaces.vo.UserVO;
@@ -45,6 +46,14 @@ public class HomeController {
     @ResponseBody
     List<UserVO> contactList(@RequestBody ContactListReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
         return userInfoService.queryContacts(req, info);
+    }
+
+    @PostMapping("/getUserInfo")
+    @LoggerOut
+    public
+    @ResponseBody
+    Long getUserInfo(@RequestBody EmptyReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
+        return info.getId();
     }
 
     @PostMapping("/updateContact")
