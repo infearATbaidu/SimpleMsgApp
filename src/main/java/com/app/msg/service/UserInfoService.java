@@ -1,6 +1,7 @@
 package com.app.msg.service;
 
 import com.app.msg.common.UserSessionInfo;
+import com.app.msg.domain.entity.User;
 import com.app.msg.interfaces.request.ContactListReq;
 import com.app.msg.interfaces.request.LoginReq;
 import com.app.msg.interfaces.request.RegisterReq;
@@ -22,4 +23,6 @@ public interface UserInfoService {
     boolean isLogin(HttpSession session);
 
     List<UserVO> queryContacts(ContactListReq req, UserSessionInfo info);
+
+    User findById(Long id);
 }

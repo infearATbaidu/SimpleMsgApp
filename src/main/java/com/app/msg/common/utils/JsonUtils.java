@@ -1,4 +1,4 @@
-package com.app.msg.common.json;
+package com.app.msg.common.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;

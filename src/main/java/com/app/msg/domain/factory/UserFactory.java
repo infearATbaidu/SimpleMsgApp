@@ -1,6 +1,6 @@
 package com.app.msg.domain.factory;
 
-import com.app.msg.common.md5.MD5Utils;
+import com.app.msg.common.utils.MD5Utils;
 import com.app.msg.domain.entity.User;
 import com.app.msg.interfaces.request.RegisterReq;
 

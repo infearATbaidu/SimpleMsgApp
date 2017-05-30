@@ -1,0 +1,7 @@
+package com.app.msg.interfaces.request;
+
+/**
+ * Created by infear on 2017/5/29.
+ */
+public class EmptyReq {
+}

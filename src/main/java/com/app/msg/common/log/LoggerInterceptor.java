@@ -1,7 +1,7 @@
 package com.app.msg.common.log;
 
 
-import com.app.msg.common.json.JsonUtils;
+import com.app.msg.common.utils.JsonUtils;
 import com.app.msg.interfaces.BaseResponse;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

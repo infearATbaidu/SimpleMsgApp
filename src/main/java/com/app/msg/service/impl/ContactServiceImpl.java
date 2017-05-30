@@ -1,5 +1,6 @@
 package com.app.msg.service.impl;
 
+import com.app.msg.common.Constants;
 import com.app.msg.common.ContactStatus;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.factory.ContactFactory;
@@ -20,7 +21,6 @@ public class ContactServiceImpl implements ContactService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    private static final String CONTACTS = "/app/contactList?id=";
 
     @Override
     public boolean updateContact(UpdateContactReq req, Long curUserId) {
@@ -32,11 +32,11 @@ public class ContactServiceImpl implements ContactService {
             contact.setStatus(req.isFlag() ? ContactStatus.ADDED : ContactStatus.REMOVED);
             contactRepository.save(contact);
         } else if (req.isFlag()) {
-            contact = ContactFactory.create(req.getUserId(), curUserId, req.isFlag() ? ContactStatus.ADDED : ContactStatus.REMOVED);
+            contact = ContactFactory.create(req.getUserId(), curUserId, ContactStatus.ADDED);
             contactRepository.save(contact);
         }
-        messagingTemplate.convertAndSend(CONTACTS + curUserId, "");
-        messagingTemplate.convertAndSend(CONTACTS + req.getUserId(), "");
+        messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + curUserId, "");
+        messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + req.getUserId(), "");
         return true;
     }
 }

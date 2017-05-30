@@ -15,9 +15,12 @@
 <h3 th:text="${info.id}" th:name="id" th:hidden="true"></h3>
 <h3 th:text="'Your name：' + ${info.name}"></h3>
 <table>
+    <td>name</td>
+    <td>msgs</td>
+    <td>add(+)/remove(-)</td>
     <tr ng-repeat="user in contacts">
         <td>{{user.name}}</td>
-        <td><input type="button" value="---" ng-click=""/></td>
+        <td><input type="button" value="---" ng-click="startChart(user)"/></td>
         <td><input type="button" value="{{user.contactFlag?'-':'+'}}"
                    ng-click="updateContact(user.id,user.contactFlag?false:true)"/></td>
     </tr>
@@ -29,7 +32,7 @@
 <table>
     <tr ng-repeat="user in searchResults">
         <td>{{user.name}}</td>
-        <td><input type="button" value="---" ng-click=""/></td>
+        <td><input type="button" value="---" ng-click="startChart(user)"/></td>
         <td><input type="button" value="{{user.contactFlag?'-':'+'}}"
                    ng-click="updateContact(user.id,user.contactFlag?false:true)"/></td>
     </tr>

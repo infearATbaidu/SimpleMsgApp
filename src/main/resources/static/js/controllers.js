@@ -1,5 +1,12 @@
 var ctrl = angular.module('ctrl', []);
 
+ctrl.config(function ($locationProvider) {
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+});
+
 ctrl.controller('register', function ($rootScope, $scope, $http) {
     $scope.message = '';
     $scope.name = '';
@@ -65,7 +72,7 @@ ctrl.controller('login', function ($rootScope, $scope, $http) {
 
 });
 
-ctrl.controller('index', function ($rootScope, $scope, $http, ws) {
+ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
     $scope.userId = '';
     $scope.searchResults = []
     $scope.contacts = []
@@ -155,4 +162,86 @@ ctrl.controller('index', function ($rootScope, $scope, $http, ws) {
         $scope.contactList();
         $scope.initStompClient();
     }
+
+    $scope.startChart = function (user) {
+        $window.open('/chart?id=' + user.id);
+    }
+});
+
+ctrl.controller('chat', function ($rootScope, $scope, $http, $location) {
+    $scope.userId = '';
+    $scope.userName = '';
+    $scope.userId2Chat = $location.search().id;
+    $scope.username2Chat = ''
+
+    $scope.chatUserInfo = new Map();
+
+    $scope.msgs = [];
+    $scope.newMsg = '';
+
+    $scope.init = function () {
+        $http(
+            {
+                url: '/getChartInfo',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {"userId2Chat": $scope.userId2Chat}
+            }).success(function (r) {
+            if (r) {
+                $scope.userId = r.srcId;
+                $scope.userName = r.srcName;
+                $scope.userId2Chat = r.destId;
+                $scope.username2Chat = r.destName;
+                $scope.chatUserInfo.set($scope.userId, $scope.userName);
+                $scope.chatUserInfo.set($scope.userId2Chat, $scope.username2Chat);
+                $scope.queryMsgHistory();
+            }
+        });
+
+    }
+
+    $scope.queryMsgHistory = function () {
+        $http(
+            {
+                url: '/queryMsgHistory',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {"srcId": $scope.userId, "destId": $scope.userId2Chat}
+            }).success(function (r) {
+            if (r) {
+                $scope.msgs = r;
+            }
+        });
+    }
+
+    $scope.sendMsg = function () {
+        var msg = new Object();
+        msg.srcId = $scope.userId;
+        msg.srcName = $scope.userName;
+        msg.destId = $scope.userId2Chat;
+        msg.destName = $scope.username2Chat;
+        msg.content = $scope.newMsg;
+        msg.time = new Date().toLocaleTimeString();
+        $http(
+            {
+                url: '/sendMsg',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(msg)
+            }).success(function (r) {
+            if (r != -1) {
+                msg.id = r;
+                $scope.msgs.unshift(msg);
+            }
+        });
+
+        $scope.newMsg = '';
+    }
+
 });

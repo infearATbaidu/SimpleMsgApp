@@ -18,7 +18,7 @@ public class User {
     private String password;
     @Column(name = "created_time")
     private Date createdTime;
-    @Column(name = "updated_time")
+    @Column(name = "updated_time", updatable = false)
     private Date updatedTime;
 
     public Long getId() {

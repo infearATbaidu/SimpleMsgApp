@@ -1,7 +1,7 @@
 package com.app.msg.service.impl;
 
 import com.app.msg.common.UserSessionInfo;
-import com.app.msg.common.md5.MD5Utils;
+import com.app.msg.common.utils.MD5Utils;
 import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.User;
@@ -123,5 +123,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             result.add(vo);
         }
         return result;
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findOne(id);
     }
 }

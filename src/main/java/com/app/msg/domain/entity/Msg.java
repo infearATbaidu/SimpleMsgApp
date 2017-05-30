@@ -7,18 +7,20 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created by infear on 2017/5/26.
+ * Created by infear on 2017/5/30.
  */
 @Entity
-public class Contact {
+public class Msg {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(name = "user_id_s")
-    private Long userIdS;
-    @Column(name = "user_id_l")
-    private Long userIdL;
+    private String content;
+    @Column(name = "src_id")
+    private Long srcId;
+    @Column(name = "dest_id")
+    private Long destId;
     private int status;
+    private boolean isDelete;
     @Column(name = "created_time")
     private Date createdTime;
     @Column(name = "updated_time", updatable = false)
@@ -32,20 +34,28 @@ public class Contact {
         this.id = id;
     }
 
-    public Long getUserIdS() {
-        return userIdS;
+    public String getContent() {
+        return content;
     }
 
-    public void setUserIdS(Long userIdS) {
-        this.userIdS = userIdS;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Long getUserIdL() {
-        return userIdL;
+    public Long getSrcId() {
+        return srcId;
     }
 
-    public void setUserIdL(Long userIdL) {
-        this.userIdL = userIdL;
+    public void setSrcId(Long srcId) {
+        this.srcId = srcId;
+    }
+
+    public Long getDestId() {
+        return destId;
+    }
+
+    public void setDestId(Long destId) {
+        this.destId = destId;
     }
 
     public int getStatus() {
@@ -54,6 +64,14 @@ public class Contact {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 
     public Date getCreatedTime() {
