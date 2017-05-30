@@ -157,10 +157,11 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
             }).success(function (r) {
             if (r) {
                 $scope.userId = r;
+                $scope.contactList();
+                $scope.initStompClient();
             }
         });
-        $scope.contactList();
-        $scope.initStompClient();
+
     }
 
     $scope.startChart = function (user) {
@@ -168,7 +169,7 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
     }
 });
 
-ctrl.controller('chat', function ($rootScope, $scope, $http, $location) {
+ctrl.controller('chat', function ($rootScope, $scope, $http, $location, ws) {
     $scope.userId = '';
     $scope.userName = '';
     $scope.userId2Chat = $location.search().id;
@@ -197,8 +198,10 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location) {
                 $scope.chatUserInfo.set($scope.userId, $scope.userName);
                 $scope.chatUserInfo.set($scope.userId2Chat, $scope.username2Chat);
                 $scope.queryMsgHistory();
+                $scope.initStompClient();
             }
         });
+
 
     }
 
@@ -225,7 +228,7 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location) {
         msg.destId = $scope.userId2Chat;
         msg.destName = $scope.username2Chat;
         msg.content = $scope.newMsg;
-        msg.time = new Date().toLocaleTimeString();
+        msg.time = new Date().toDateString();
         $http(
             {
                 url: '/sendMsg',
@@ -242,6 +245,29 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location) {
         });
 
         $scope.newMsg = '';
+    }
+
+    $scope.addMsg = function (newMsgRec) {
+        $scope.msgs.push(JSON.parse(newMsgRec.body));
+    }
+
+    $scope.initStompClient = function () {
+        ws.init('/ws');
+
+        ws.connect(function (frame) {
+            ws.subscribe("/app/msgList?id=" + $scope.userId, function (message) {
+                $scope.addMsg(message);
+                /*var msg = new Object();
+                 msg.id = message.id;
+                 msg.srcId = message.srcId;
+                 msg.destId = message.destId;
+                 msg.content = message.content;
+                 msg.time = message.time;
+                 $scope.msgs.unshift(msg);
+                 alert($scope.msgs.length);*/
+            });
+
+        });
     }
 
 });

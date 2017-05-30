@@ -5,4 +5,6 @@ package com.app.msg.common;
  */
 public class MsgStatus {
     public static final int UNREAD = -1;
+    public static final int READ = 1;
+
 }

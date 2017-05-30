@@ -2,6 +2,7 @@ package com.app.msg.service.impl;
 
 import com.app.msg.common.Constants;
 import com.app.msg.common.ContactStatus;
+import com.app.msg.common.MsgStatus;
 import com.app.msg.common.utils.DateTimeUtils;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.Msg;
@@ -38,6 +39,7 @@ public class MsgServiceImpl implements MsgService {
         Msg msg = MsgFactory.create(req);
         msgRepository.save(msg);
         addContacts(req.getSrcId(), req.getDestId());
+        messagingTemplate.convertAndSend(Constants.MSG_BROKER + req.getDestId(), convert2MsgVO(msg));
         return msg.getId();
     }
 
@@ -67,15 +69,35 @@ public class MsgServiceImpl implements MsgService {
         List<Msg> msgList = msgRepository.queryMsg(req.getSrcId(), req.getDestId());
         if (CollectionUtils.isEmpty(msgList)) return null;
         List<MsgVO> result = Lists.newArrayList();
+        List<Msg> unreadMsgs = Lists.newArrayList();
         for (Msg msg : msgList) {
-            MsgVO vo = new MsgVO();
-            vo.setId(msg.getId());
-            vo.setSrcId(msg.getSrcId());
-            vo.setDestId(msg.getDestId());
-            vo.setContent(msg.getContent());
-            vo.setTime(DateTimeUtils.displayDateTime(msg.getCreatedTime()));
+            MsgVO vo = convert2MsgVO(msg);
             result.add(vo);
+            // 如果是自己的未读消息，则置为已读
+            if (msg.getDestId().equals(req.getSrcId()) && msg.getStatus() == MsgStatus.UNREAD) {
+                unreadMsgs.add(msg);
+                msg.setStatus(MsgStatus.READ);
+            }
+        }
+        if (!CollectionUtils.isEmpty(unreadMsgs)) {
+            markAsRead(req.getSrcId(), unreadMsgs);
         }
         return result;
+    }
+
+    private MsgVO convert2MsgVO(Msg msg) {
+        MsgVO vo = new MsgVO();
+        vo.setId(msg.getId());
+        vo.setSrcId(msg.getSrcId());
+        vo.setDestId(msg.getDestId());
+        vo.setContent(msg.getContent());
+        vo.setTime(DateTimeUtils.displayDateTime(msg.getCreatedTime()));
+        return vo;
+    }
+
+    //Todo:use async
+    private void markAsRead(Long srcId, List<Msg> unreadMsgs) {
+        msgRepository.save(unreadMsgs);
+        messagingTemplate.convertAndSend(Constants.MSG_BROKER + srcId, "");
     }
 }

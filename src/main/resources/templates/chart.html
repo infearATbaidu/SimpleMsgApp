@@ -3,37 +3,31 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="css/chat.css" rel="stylesheet"/>
 </head>
 <body ng-app="app" ng-controller="chat" ng-init="init()">
 <h1>Chat Page</h1>
 <h3 th:text="'Your name：' + ${info.name}"></h3>
 <h3 th:text="'Your are chatting with：' + ${userChatWith.name}"/>
-<div class="container">
-    <div class="row">
-        <div class="chat-box">
-            <h4>Message Box:</h4>
-            <table>
-                <td>name</td>
-                <td>msg</td>
-                <td>time</td>
-                <tr ng-repeat="msg in msgs">
-                    <td>{{chatUserInfo.get(msg.srcId)}}</td>
-                    <td>{{msg.content}}</td>
-                    <td>{{msg.time}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group">
-            <p>Enter your message:</p>
-            <input id="newMessageInput" type="text" class="form-control" ng-model="newMsg"/>
-            <input type="button" value="Send" ng-click="sendMsg()"/>
-        </div>
+
+<h4>Message Box:</h4>
+<table>
+    <td>name</td>
+    <td>msg</td>
+    <td>time</td>
+    <tr ng-repeat="msg in msgs">
+        <td>{{chatUserInfo.get(msg.srcId)}}</td>
+        <td>{{msg.content}}</td>
+        <td>{{msg.time}}</td>
+    </tr>
+</table>
+<div class="row">
+    <div class="form-group">
+        <p>Enter your message:</p>
+        <input id="newMessageInput" type="text" class="form-control" ng-model="newMsg"/>
+        <input type="button" value="Send" ng-click="sendMsg()"/>
     </div>
 </div>
+
 <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.js"></script>
