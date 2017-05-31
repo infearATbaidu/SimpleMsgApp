@@ -7,6 +7,7 @@ public class UserVO {
     private Long id;
     private String name;
     private boolean contactFlag;
+    private Long unreadMsgCnt;
 
     public Long getId() {
         return id;
@@ -30,5 +31,13 @@ public class UserVO {
 
     public void setContactFlag(boolean contactFlag) {
         this.contactFlag = contactFlag;
+    }
+
+    public Long getUnreadMsgCnt() {
+        return unreadMsgCnt;
+    }
+
+    public void setUnreadMsgCnt(Long unreadMsgCnt) {
+        this.unreadMsgCnt = unreadMsgCnt;
     }
 }

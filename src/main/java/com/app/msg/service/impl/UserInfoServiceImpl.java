@@ -3,6 +3,7 @@ package com.app.msg.service.impl;
 import com.app.msg.common.UserSessionInfo;
 import com.app.msg.common.utils.MD5Utils;
 import com.app.msg.config.WebSecurityConfig;
+import com.app.msg.domain.dto.UserToMsgCntDTO;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.User;
 import com.app.msg.domain.factory.UserFactory;
@@ -11,9 +12,11 @@ import com.app.msg.interfaces.request.LoginReq;
 import com.app.msg.interfaces.request.RegisterReq;
 import com.app.msg.interfaces.vo.UserVO;
 import com.app.msg.repo.ContactRepository;
+import com.app.msg.repo.MsgRepository;
 import com.app.msg.repo.UserRepository;
 import com.app.msg.service.UserInfoService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserRepository userRepository;
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private MsgRepository msgRepository;
 
     @Override
     public boolean login(LoginReq req, HttpSession session) {
@@ -114,12 +120,18 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (CollectionUtils.isEmpty(users)) {
             return null;
         }
+        List<UserToMsgCntDTO> unreadMsgs = msgRepository.queryUnreadMsgCount(info.getId(), contactIds);
+        Map<Long, Long> user2Cnt = Maps.newHashMap();
+        for (UserToMsgCntDTO dto : unreadMsgs) {
+            user2Cnt.put(dto.getUserId(), dto.getCnt());
+        }
         List<UserVO> result = Lists.newArrayList();
         for (User user : users) {
             UserVO vo = new UserVO();
             vo.setId(user.getId());
             vo.setName(user.getName());
             vo.setContactFlag(true);
+            vo.setUnreadMsgCnt(user2Cnt.getOrDefault(user.getId(), 0L));
             result.add(vo);
         }
         return result;

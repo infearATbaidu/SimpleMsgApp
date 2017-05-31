@@ -76,6 +76,7 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
     $scope.userId = '';
     $scope.searchResults = []
     $scope.contacts = []
+    $scope.msgCnt = new Map();
     //搜索用户
     $scope.search = function () {
         var seReq = new Object()
@@ -130,6 +131,10 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
             }).success(function (r) {
             if (r.length != 0) {
                 $scope.contacts = r;
+                $scope.msgCnt.clear();
+                for (contact in $scope.contacts) {
+                    $scope.msgCnt.set(contact.id, contact.unreadMsgCnt);
+                }
             }
         });
     }

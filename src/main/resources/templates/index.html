@@ -19,7 +19,7 @@
     <td>add(+)/remove(-)</td>
     <tr ng-repeat="user in contacts">
         <td>{{user.name}}</td>
-        <td><input type="button" value="---" ng-click="startChart(user)"/></td>
+        <td><input type="button" value="{{msgCnt.get(user.id)}}" ng-click="startChart(user)"/></td>
         <td><input type="button" value="{{user.contactFlag?'-':'+'}}"
                    ng-click="updateContact(user.id,user.contactFlag?false:true)"/></td>
     </tr>
