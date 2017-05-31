@@ -10,7 +10,7 @@ import java.util.List;
  * Created by infear on 2017/5/30.
  */
 public interface MsgService {
-    Long sendMsg(SendMsg req);
+    MsgVO sendMsg(SendMsg req);
 
     List<MsgVO> queryMsg(QueryMsg req);
 }

@@ -35,12 +35,13 @@ public class MsgServiceImpl implements MsgService {
     private SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public Long sendMsg(SendMsg req) {
+    public MsgVO sendMsg(SendMsg req) {
         Msg msg = MsgFactory.create(req);
         msgRepository.save(msg);
         addContacts(req.getSrcId(), req.getDestId());
-        messagingTemplate.convertAndSend(Constants.MSG_BROKER + req.getDestId(), convert2MsgVO(msg));
-        return msg.getId();
+        MsgVO vo = convert2MsgVO(msg);
+        messagingTemplate.convertAndSend(Constants.MSG_BROKER + req.getDestId(), vo);
+        return vo;
     }
 
     private void addContacts(Long srcId, Long destId) {

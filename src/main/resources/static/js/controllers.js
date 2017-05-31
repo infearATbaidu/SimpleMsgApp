@@ -228,7 +228,6 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location, ws) {
         msg.destId = $scope.userId2Chat;
         msg.destName = $scope.username2Chat;
         msg.content = $scope.newMsg;
-        msg.time = new Date().toDateString();
         $http(
             {
                 url: '/sendMsg',
@@ -238,17 +237,12 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location, ws) {
                 },
                 data: JSON.stringify(msg)
             }).success(function (r) {
-            if (r != -1) {
-                msg.id = r;
-                $scope.msgs.unshift(msg);
+            if (r) {
+                $scope.msgs.push(r);
             }
         });
 
         $scope.newMsg = '';
-    }
-
-    $scope.addMsg = function (newMsgRec) {
-        $scope.msgs.push(JSON.parse(newMsgRec.body));
     }
 
     $scope.initStompClient = function () {
@@ -256,15 +250,7 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location, ws) {
 
         ws.connect(function (frame) {
             ws.subscribe("/app/msgList?id=" + $scope.userId, function (message) {
-                $scope.addMsg(message);
-                /*var msg = new Object();
-                 msg.id = message.id;
-                 msg.srcId = message.srcId;
-                 msg.destId = message.destId;
-                 msg.content = message.content;
-                 msg.time = message.time;
-                 $scope.msgs.unshift(msg);
-                 alert($scope.msgs.length);*/
+                $scope.msgs.push(JSON.parse(message.body));
             });
 
         });
