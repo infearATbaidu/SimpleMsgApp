@@ -5,7 +5,8 @@ import com.app.msg.common.log.LoggerOut;
 import com.app.msg.config.WebSecurityConfig;
 import com.app.msg.domain.entity.User;
 import com.app.msg.interfaces.request.CharInfoReq;
-import com.app.msg.interfaces.request.QueryMsg;
+import com.app.msg.interfaces.request.DeleteMsgReq;
+import com.app.msg.interfaces.request.QueryMsgReq;
 import com.app.msg.interfaces.request.SendMsg;
 import com.app.msg.interfaces.vo.ChatInfoVO;
 import com.app.msg.interfaces.vo.MsgVO;
@@ -15,11 +16,7 @@ import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -62,7 +59,15 @@ public class ChartController {
     @LoggerOut
     public
     @ResponseBody
-    List<MsgVO> queryMsgHistory(@RequestBody QueryMsg req) {
+    List<MsgVO> queryMsgHistory(@RequestBody QueryMsgReq req) {
         return msgService.queryMsg(req);
+    }
+
+    @PostMapping("/deleteMsg")
+    @LoggerOut
+    public
+    @ResponseBody
+    boolean deleteMsg(@RequestBody DeleteMsgReq req) {
+        return msgService.deleteMsg(req);
     }
 }

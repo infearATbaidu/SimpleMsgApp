@@ -1,11 +1,11 @@
 package com.app.msg.interfaces.request;
 
 /**
- * Created by infear on 2017/5/30.
+ * Created by infear on 2017/6/1.
  */
-public class QueryMsg {
+public class DeleteMsgReq {
     private Long srcId;
-    private Long destId;
+    private Long msgId;
 
     public Long getSrcId() {
         return srcId;
@@ -15,11 +15,11 @@ public class QueryMsg {
         this.srcId = srcId;
     }
 
-    public Long getDestId() {
-        return destId;
+    public Long getMsgId() {
+        return msgId;
     }
 
-    public void setDestId(Long destId) {
-        this.destId = destId;
+    public void setMsgId(Long msgId) {
+        this.msgId = msgId;
     }
 }

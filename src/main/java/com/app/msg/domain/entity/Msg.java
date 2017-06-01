@@ -20,6 +20,7 @@ public class Msg {
     @Column(name = "dest_id")
     private Long destId;
     private int status;
+    @Column(name = "is_delete")
     private boolean isDelete;
     @Column(name = "created_time")
     private Date createdTime;

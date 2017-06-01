@@ -132,8 +132,8 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
             if (r.length != 0) {
                 $scope.contacts = r;
                 $scope.msgCnt.clear();
-                for (contact in $scope.contacts) {
-                    $scope.msgCnt.set(contact.id, contact.unreadMsgCnt);
+                for (i in $scope.contacts) {
+                    $scope.msgCnt.set($scope.contacts[i].id, $scope.contacts[i]);
                 }
             }
         });
@@ -147,7 +147,18 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
                 $scope.contactList();
             });
 
+            ws.subscribe("/app/unreadMsgCnt?id=" + $scope.userId, function (message) {
+                var r = JSON.parse(message.body);
+                if (r.resetFlag) {
+                    $scope.msgCnt.get(r.srcId).unreadMsgCnt = 0;
+                }
+                else {
+                    $scope.msgCnt.get(r.srcId).unreadMsgCnt++;
+                }
+            });
+
         });
+
     }
 
     $scope.init = function () {
@@ -258,6 +269,25 @@ ctrl.controller('chat', function ($rootScope, $scope, $http, $location, ws) {
                 $scope.msgs.push(JSON.parse(message.body));
             });
 
+        });
+    }
+
+    $scope.delMsg = function (index) {
+        var req = new Object();
+        req.msgId = $scope.msgs[index].id;
+        req.srcId = $scope.msgs[index].srcId;
+        $http(
+            {
+                url: '/deleteMsg',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(req)
+            }).success(function (r) {
+            if (r) {
+                $scope.msgs.splice(index, 1);
+            }
         });
     }
 

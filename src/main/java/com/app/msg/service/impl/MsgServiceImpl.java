@@ -8,9 +8,11 @@ import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.Msg;
 import com.app.msg.domain.factory.ContactFactory;
 import com.app.msg.domain.factory.MsgFactory;
-import com.app.msg.interfaces.request.QueryMsg;
+import com.app.msg.interfaces.request.DeleteMsgReq;
+import com.app.msg.interfaces.request.QueryMsgReq;
 import com.app.msg.interfaces.request.SendMsg;
 import com.app.msg.interfaces.vo.MsgVO;
+import com.app.msg.interfaces.vo.UnreadMsgVo;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.repo.MsgRepository;
 import com.app.msg.service.MsgService;
@@ -18,6 +20,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -41,6 +44,7 @@ public class MsgServiceImpl implements MsgService {
         addContacts(req.getSrcId(), req.getDestId());
         MsgVO vo = convert2MsgVO(msg);
         messagingTemplate.convertAndSend(Constants.MSG_BROKER + req.getDestId(), vo);
+        messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + req.getDestId(), new UnreadMsgVo(req.getSrcId(), false));
         return vo;
     }
 
@@ -66,7 +70,7 @@ public class MsgServiceImpl implements MsgService {
     }
 
     @Override
-    public List<MsgVO> queryMsg(QueryMsg req) {
+    public List<MsgVO> queryMsg(QueryMsgReq req) {
         List<Msg> msgList = msgRepository.queryMsg(req.getSrcId(), req.getDestId());
         if (CollectionUtils.isEmpty(msgList)) return null;
         List<MsgVO> result = Lists.newArrayList();
@@ -81,9 +85,21 @@ public class MsgServiceImpl implements MsgService {
             }
         }
         if (!CollectionUtils.isEmpty(unreadMsgs)) {
-            markAsRead(req.getSrcId(), unreadMsgs);
+            markAsRead(req.getSrcId(), req.getDestId(), unreadMsgs);
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteMsg(DeleteMsgReq req) {
+        Msg msg = msgRepository.findOneForUpdate(req.getMsgId());
+        if (!req.getSrcId().equals(msg.getSrcId())) {
+            return false;
+        }
+        msg.setDelete(true);
+        msgRepository.save(msg);
+        return true;
     }
 
     private MsgVO convert2MsgVO(Msg msg) {
@@ -97,8 +113,8 @@ public class MsgServiceImpl implements MsgService {
     }
 
     //Todo:use async
-    private void markAsRead(Long srcId, List<Msg> unreadMsgs) {
+    private void markAsRead(Long srcId, Long destId, List<Msg> unreadMsgs) {
         msgRepository.save(unreadMsgs);
-        messagingTemplate.convertAndSend(Constants.MSG_BROKER + srcId, "");
+        messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + srcId, new UnreadMsgVo(destId, true));
     }
 }

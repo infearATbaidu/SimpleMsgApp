@@ -18,6 +18,9 @@
         <td>{{chatUserInfo.get(msg.srcId)}}</td>
         <td>{{msg.content}}</td>
         <td>{{msg.time}}</td>
+        <td ng-show="msg.srcId == userId">
+            <input type="button" value="del" ng-click="delMsg($index)"/>
+        </td>
     </tr>
 </table>
 <div class="row">
