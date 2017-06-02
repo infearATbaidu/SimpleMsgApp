@@ -1,6 +1,8 @@
 package com.app.msg.service.listener;
 
 import com.app.msg.common.contants.Constants;
+import com.app.msg.interfaces.vo.UnreadMsgVo;
+import com.app.msg.service.ContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.stereotype.Component;
 public class WSMessageEventListener {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private ContactService contactService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @EventListener
@@ -24,5 +29,20 @@ public class WSMessageEventListener {
         logger.info("handleContactsRefreshedEvent");
         messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + event.getUserIdL(), "");
         messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + event.getUserIdS(), "");
+    }
+
+    @EventListener
+    @Async
+    public void handleMessageReachedEvent4Contact(MessageReachedEvent event) {
+        logger.info("handleMessageReachedEvent4Contact");
+        contactService.updateContact(event.getDestId(), event.getSrcId(), true);
+    }
+
+    @EventListener
+    @Async
+    public void handleMessageReachedEvent4WS(MessageReachedEvent event) {
+        logger.info("handleMessageReachedEvent4WS");
+        messagingTemplate.convertAndSend(Constants.MSG_BROKER + event.getDestId(), event.getMsgVO());
+        messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + event.getDestId(), new UnreadMsgVo(event.getSrcId(), false));
     }
 }

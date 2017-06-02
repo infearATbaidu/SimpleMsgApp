@@ -13,7 +13,11 @@ import com.app.msg.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
@@ -61,6 +65,6 @@ public class HomeController {
     public
     @ResponseBody
     boolean searchUsers(@RequestBody UpdateContactReq req, @SessionAttribute(WebSecurityConfig.SESSION_KEY) UserSessionInfo info) {
-        return contactService.updateContact(req, info.getId());
+        return contactService.updateContact(req.getUserId(), info.getId(), req.getIsAdd());
     }
 }

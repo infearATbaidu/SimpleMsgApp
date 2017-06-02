@@ -5,7 +5,7 @@ package com.app.msg.interfaces.request;
  */
 public class UpdateContactReq {
     private Long userId;
-    private boolean flag;
+    private boolean isAdd;
 
     public Long getUserId() {
         return userId;
@@ -15,11 +15,11 @@ public class UpdateContactReq {
         this.userId = userId;
     }
 
-    public boolean isFlag() {
-        return flag;
+    public boolean getIsAdd() {
+        return isAdd;
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setIsAdd(boolean add) {
+        this.isAdd = add;
     }
 }

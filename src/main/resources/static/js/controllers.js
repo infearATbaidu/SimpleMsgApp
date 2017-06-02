@@ -101,7 +101,7 @@ ctrl.controller('index', function ($rootScope, $scope, $http, $window, ws) {
     $scope.updateContact = function (userId, flag) {
         var addContactReq = new Object();
         addContactReq.userId = userId;
-        addContactReq.flag = flag;
+        addContactReq.isAdd = flag;
         $http(
             {
                 url: '/updateContact',
