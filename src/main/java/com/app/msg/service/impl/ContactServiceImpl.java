@@ -6,7 +6,7 @@ import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.factory.ContactFactory;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.service.ContactService;
-import com.app.msg.service.listener.ContactsRefreshedEvent;
+import com.app.msg.service.listener.event.ContactsRefreshedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

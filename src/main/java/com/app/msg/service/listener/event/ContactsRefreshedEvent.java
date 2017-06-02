@@ -1,4 +1,4 @@
-package com.app.msg.service.listener;
+package com.app.msg.service.listener.event;
 
 /**
  * Created by infear on 2017/6/2.

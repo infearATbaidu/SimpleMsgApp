@@ -1,6 +1,5 @@
 package com.app.msg.service.impl;
 
-import com.app.msg.common.contants.Constants;
 import com.app.msg.common.contants.MsgStatus;
 import com.app.msg.common.utils.DateTimeUtils;
 import com.app.msg.config.AppEventPublisher;
@@ -10,13 +9,12 @@ import com.app.msg.interfaces.request.DeleteMsgReq;
 import com.app.msg.interfaces.request.QueryMsgReq;
 import com.app.msg.interfaces.request.SendMsg;
 import com.app.msg.interfaces.vo.MsgVO;
-import com.app.msg.interfaces.vo.UnreadMsgVo;
 import com.app.msg.repo.MsgRepository;
 import com.app.msg.service.MsgService;
-import com.app.msg.service.listener.MessageReachedEvent;
+import com.app.msg.service.listener.event.MessageReachedEvent;
+import com.app.msg.service.listener.event.MessageReadEvent;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -30,8 +28,6 @@ import java.util.List;
 public class MsgServiceImpl implements MsgService {
     @Autowired
     private MsgRepository msgRepository;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private AppEventPublisher appEventPublisher;
 
@@ -87,9 +83,8 @@ public class MsgServiceImpl implements MsgService {
         return vo;
     }
 
-    //Todo:use async
     private void markAsRead(Long srcId, Long destId, List<Msg> unreadMsgs) {
         msgRepository.save(unreadMsgs);
-        messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + srcId, new UnreadMsgVo(destId, true));
+        appEventPublisher.publish(new MessageReadEvent(srcId, destId));
     }
 }

@@ -3,6 +3,9 @@ package com.app.msg.service.listener;
 import com.app.msg.common.contants.Constants;
 import com.app.msg.interfaces.vo.UnreadMsgVo;
 import com.app.msg.service.ContactService;
+import com.app.msg.service.listener.event.ContactsRefreshedEvent;
+import com.app.msg.service.listener.event.MessageReachedEvent;
+import com.app.msg.service.listener.event.MessageReadEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +47,12 @@ public class WSMessageEventListener {
         logger.info("handleMessageReachedEvent4WS");
         messagingTemplate.convertAndSend(Constants.MSG_BROKER + event.getDestId(), event.getMsgVO());
         messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + event.getDestId(), new UnreadMsgVo(event.getSrcId(), false));
+    }
+
+    @EventListener
+    @Async
+    public void handleMessageReadEvent(MessageReadEvent event) {
+        logger.info("handleMessageReadEvent");
+        messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + event.getSrcId(), new UnreadMsgVo(event.getDestId(), true));
     }
 }
