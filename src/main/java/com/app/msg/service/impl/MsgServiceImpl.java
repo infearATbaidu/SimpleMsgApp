@@ -2,7 +2,6 @@ package com.app.msg.service.impl;
 
 import com.app.msg.common.contants.MsgStatus;
 import com.app.msg.common.utils.DateTimeUtils;
-import com.app.msg.config.AppEventPublisher;
 import com.app.msg.domain.entity.Msg;
 import com.app.msg.domain.factory.MsgFactory;
 import com.app.msg.interfaces.request.DeleteMsgReq;
@@ -13,6 +12,7 @@ import com.app.msg.repo.MsgRepository;
 import com.app.msg.service.MsgService;
 import com.app.msg.service.listener.event.MessageReachedEvent;
 import com.app.msg.service.listener.event.MessageReadEvent;
+import com.app.msg.service.publisher.AppEventPublisher;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

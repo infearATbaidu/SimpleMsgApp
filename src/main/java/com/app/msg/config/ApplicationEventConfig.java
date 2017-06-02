@@ -1,5 +1,6 @@
 package com.app.msg.config;
 
+import com.app.msg.service.publisher.AppEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

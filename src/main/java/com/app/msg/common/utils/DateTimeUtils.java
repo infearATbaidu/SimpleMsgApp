@@ -300,11 +300,4 @@ public abstract class DateTimeUtils {
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
-
-    public static void main(String args[]) {
-        String date = "2015年03月20日 13:00";
-        Date parseDate = DateTimeUtils.parse(date, MOVIEB_DATE_PATTERN);
-        System.out.println(DateTimeUtils.displayDate(parseDate));
-    }
-
 }

@@ -1,12 +1,12 @@
 package com.app.msg.service.impl;
 
 import com.app.msg.common.contants.ContactStatus;
-import com.app.msg.config.AppEventPublisher;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.factory.ContactFactory;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.service.ContactService;
 import com.app.msg.service.listener.event.ContactsRefreshedEvent;
+import com.app.msg.service.publisher.AppEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

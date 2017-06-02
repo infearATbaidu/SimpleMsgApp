@@ -1,4 +1,4 @@
-package com.app.msg.config;
+package com.app.msg.service.publisher;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
