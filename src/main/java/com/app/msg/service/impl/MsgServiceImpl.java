@@ -1,9 +1,10 @@
 package com.app.msg.service.impl;
 
-import com.app.msg.common.Constants;
-import com.app.msg.common.ContactStatus;
-import com.app.msg.common.MsgStatus;
+import com.app.msg.common.contants.Constants;
+import com.app.msg.common.contants.ContactStatus;
+import com.app.msg.common.contants.MsgStatus;
 import com.app.msg.common.utils.DateTimeUtils;
+import com.app.msg.config.AppEventPublisher;
 import com.app.msg.domain.entity.Contact;
 import com.app.msg.domain.entity.Msg;
 import com.app.msg.domain.factory.ContactFactory;
@@ -16,6 +17,7 @@ import com.app.msg.interfaces.vo.UnreadMsgVo;
 import com.app.msg.repo.ContactRepository;
 import com.app.msg.repo.MsgRepository;
 import com.app.msg.service.MsgService;
+import com.app.msg.service.listener.ContactsRefreshedEvent;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -36,6 +38,8 @@ public class MsgServiceImpl implements MsgService {
     private ContactRepository contactRepository;
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private AppEventPublisher appEventPublisher;
 
     @Override
     public MsgVO sendMsg(SendMsg req) {
@@ -54,19 +58,13 @@ public class MsgServiceImpl implements MsgService {
             if (contact.getStatus() == ContactStatus.REMOVED) {
                 contact.setStatus(ContactStatus.ADDED);
                 contactRepository.save(contact);
-                notifyContactToRefresh(srcId, destId);
+                appEventPublisher.publish(new ContactsRefreshedEvent(srcId, destId));
             }
         } else {
             contact = ContactFactory.create(srcId, destId, ContactStatus.ADDED);
             contactRepository.save(contact);
-            notifyContactToRefresh(srcId, destId);
+            appEventPublisher.publish(new ContactsRefreshedEvent(srcId, destId));
         }
-    }
-
-    // 发送ws消息 Todo:User async
-    private void notifyContactToRefresh(Long srcId, Long destId) {
-        messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + srcId, "");
-        messagingTemplate.convertAndSend(Constants.CONTACTS_BROKER + destId, "");
     }
 
     @Override

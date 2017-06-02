@@ -1,4 +1,4 @@
-package com.app.msg.common;
+package com.app.msg.common.contants;
 
 /**
  * Created by infear on 2017/5/29.

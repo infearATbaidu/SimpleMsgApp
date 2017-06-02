@@ -1,6 +1,6 @@
 package com.app.msg.domain.factory;
 
-import com.app.msg.common.MsgStatus;
+import com.app.msg.common.contants.MsgStatus;
 import com.app.msg.domain.entity.Msg;
 import com.app.msg.interfaces.request.SendMsg;
 
