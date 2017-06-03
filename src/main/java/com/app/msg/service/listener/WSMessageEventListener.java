@@ -3,6 +3,7 @@ package com.app.msg.service.listener;
 import com.app.msg.common.contants.Constants;
 import com.app.msg.interfaces.vo.UnreadMsgVo;
 import com.app.msg.service.ContactService;
+import com.app.msg.service.MsgService;
 import com.app.msg.service.listener.event.ContactsRefreshedEvent;
 import com.app.msg.service.listener.event.MessageReachedEvent;
 import com.app.msg.service.listener.event.MessageReadEvent;
@@ -23,6 +24,8 @@ public class WSMessageEventListener {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private ContactService contactService;
+    @Autowired
+    private MsgService msgService;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -36,15 +39,9 @@ public class WSMessageEventListener {
 
     @EventListener
     @Async
-    public void handleMessageReachedEvent4Contact(MessageReachedEvent event) {
-        logger.info("handleMessageReachedEvent4Contact");
+    public void handleMessageReachedEvent(MessageReachedEvent event) {
+        logger.info("handleMessageReachedEvent");
         contactService.updateContact(event.getDestId(), event.getSrcId(), true);
-    }
-
-    @EventListener
-    @Async
-    public void handleMessageReachedEvent4WS(MessageReachedEvent event) {
-        logger.info("handleMessageReachedEvent4WS");
         messagingTemplate.convertAndSend(Constants.MSG_BROKER + event.getDestId(), event.getMsgVO());
         messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + event.getDestId(), new UnreadMsgVo(event.getSrcId(), false));
     }
@@ -53,6 +50,8 @@ public class WSMessageEventListener {
     @Async
     public void handleMessageReadEvent(MessageReadEvent event) {
         logger.info("handleMessageReadEvent");
+        msgService.markAsRead(event.getUnreadMsgs());
         messagingTemplate.convertAndSend(Constants.MSG_UNREAD_BROKER + event.getSrcId(), new UnreadMsgVo(event.getDestId(), true));
     }
+
 }

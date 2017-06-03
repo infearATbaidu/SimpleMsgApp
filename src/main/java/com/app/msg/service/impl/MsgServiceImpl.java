@@ -52,11 +52,10 @@ public class MsgServiceImpl implements MsgService {
             // 如果是自己的未读消息，则置为已读
             if (msg.getDestId().equals(req.getSrcId()) && msg.getStatus() == MsgStatus.UNREAD) {
                 unreadMsgs.add(msg);
-                msg.setStatus(MsgStatus.READ);
             }
         }
         if (!CollectionUtils.isEmpty(unreadMsgs)) {
-            markAsRead(req.getSrcId(), req.getDestId(), unreadMsgs);
+            appEventPublisher.publish(new MessageReadEvent(req.getSrcId(), req.getDestId(), unreadMsgs));
         }
         return result;
     }
@@ -73,6 +72,12 @@ public class MsgServiceImpl implements MsgService {
         return true;
     }
 
+    @Override
+    public void markAsRead(List<Msg> unreadMsgs) {
+        unreadMsgs.forEach(msg -> msg.setStatus(MsgStatus.READ));
+        msgRepository.save(unreadMsgs);
+    }
+
     private MsgVO convert2MsgVO(Msg msg) {
         MsgVO vo = new MsgVO();
         vo.setId(msg.getId());
@@ -81,10 +86,5 @@ public class MsgServiceImpl implements MsgService {
         vo.setContent(msg.getContent());
         vo.setTime(DateTimeUtils.displayDateTime(msg.getCreatedTime()));
         return vo;
-    }
-
-    private void markAsRead(Long srcId, Long destId, List<Msg> unreadMsgs) {
-        msgRepository.save(unreadMsgs);
-        appEventPublisher.publish(new MessageReadEvent(srcId, destId));
     }
 }

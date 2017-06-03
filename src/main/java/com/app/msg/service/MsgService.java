@@ -1,5 +1,6 @@
 package com.app.msg.service;
 
+import com.app.msg.domain.entity.Msg;
 import com.app.msg.interfaces.request.DeleteMsgReq;
 import com.app.msg.interfaces.request.QueryMsgReq;
 import com.app.msg.interfaces.request.SendMsg;
@@ -16,4 +17,6 @@ public interface MsgService {
     List<MsgVO> queryMsg(QueryMsgReq req);
 
     boolean deleteMsg(DeleteMsgReq req);
+
+    void markAsRead(List<Msg> unreadMsgs);
 }

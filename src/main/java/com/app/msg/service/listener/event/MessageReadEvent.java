@@ -1,15 +1,21 @@
 package com.app.msg.service.listener.event;
 
+import com.app.msg.domain.entity.Msg;
+
+import java.util.List;
+
 /**
  * Created by infear on 2017/6/2.
  */
 public class MessageReadEvent {
     private Long srcId;
     private Long destId;
+    private List<Msg> unreadMsgs;
 
-    public MessageReadEvent(Long srcId, Long destId) {
+    public MessageReadEvent(Long srcId, Long destId, List<Msg> unreadMsgs) {
         this.srcId = srcId;
         this.destId = destId;
+        this.unreadMsgs = unreadMsgs;
     }
 
     public Long getSrcId() {
@@ -26,5 +32,13 @@ public class MessageReadEvent {
 
     public void setDestId(Long destId) {
         this.destId = destId;
+    }
+
+    public List<Msg> getUnreadMsgs() {
+        return unreadMsgs;
+    }
+
+    public void setUnreadMsgs(List<Msg> unreadMsgs) {
+        this.unreadMsgs = unreadMsgs;
     }
 }
